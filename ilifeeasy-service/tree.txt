@@ -1,0 +1,32 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.ilifeeasy.service:ilifeeasy-service:jar:0.0.1-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: junit:junit:jar -> duplicate declaration of version 3.8.1 @ com.ilifeeasy:ilifeeasy:0.0.1-SNAPSHOT, E:\myspace\myProject\ilifeeasy\pom.xml, line 166, column 15
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: junit:junit:jar -> duplicate declaration of version 3.8.1 @ com.ilifeeasy:ilifeeasy:0.0.1-SNAPSHOT, E:\myspace\myProject\ilifeeasy\pom.xml, line 190, column 15
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building ilifeeasy-service 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+Downloading: http://maven.ds.gome.com.cn/nexus/content/groups/public/com/ilifeeasy/dao/ilifeeasy-dao/0.0.1-SNAPSHOT/maven-metadata.xml
+Downloading: http://maven.ds.gome.com.cn/nexus/content/groups/public/com/ilifeeasy/dao/ilifeeasy-dao/0.0.1-SNAPSHOT/ilifeeasy-dao-0.0.1-SNAPSHOT.pom
+[WARNING] The POM for com.ilifeeasy.dao:ilifeeasy-dao:jar:0.0.1-SNAPSHOT is missing, no dependency information available
+Downloading: http://maven.ds.gome.com.cn/nexus/content/groups/public/com/ilifeeasy/dao/ilifeeasy-dao/0.0.1-SNAPSHOT/ilifeeasy-dao-0.0.1-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.111s
+[INFO] Finished at: Thu Feb 04 15:00:13 CST 2016
+[INFO] Final Memory: 9M/122M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal on project ilifeeasy-service: Could not resolve dependencies for project com.ilifeeasy.service:ilifeeasy-service:jar:0.0.1-SNAPSHOT: Could not find artifact com.ilifeeasy.dao:ilifeeasy-dao:jar:0.0.1-SNAPSHOT in nexus (http://maven.ds.gome.com.cn/nexus/content/groups/public) -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/DependencyResolutionException

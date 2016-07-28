@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilifeeasy.dao.answer.ExamDetailDao">
+	
+	<resultMap type="com.ilifeeasy.entity.answer.ExamDetail" id="examDetailList">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="titleId" column="title_id" jdbcType="VARCHAR"/>
+		<result property="optionType" column="option_type" jdbcType="VARCHAR"/>
+		<result property="content" column="content" jdbcType="VARCHAR"/>
+		<result property="score" column="score" jdbcType="INTEGER"/>
+		<result property="answer" column="answer" jdbcType="VARCHAR"/>
+		<result property="resolve" column="resolve" jdbcType="VARCHAR"/>
+		<result property="optionA" column="option_a" jdbcType="VARCHAR"/>
+		<result property="optionB" column="option_b" jdbcType="VARCHAR"/>
+		<result property="optionC" column="option_c" jdbcType="VARCHAR"/>
+		<result property="optionD" column="option_d" jdbcType="VARCHAR"/>
+		<result property="optionE" column="option_e" jdbcType="VARCHAR"/>
+		<result property="dr" column="dr" jdbcType="INTEGER"/>
+		<result property="ts" column="ts" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="findByTitleId" parameterType="String" resultMap="examDetailList">
+		select id,title_id,option_type,content,score,answer,resolve,option_a,option_b,option_c,option_d,option_e,dr,ts 
+		from ieasy_db_exam_detail
+		where dr=0 and title_id=#{titleId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findByDetailId" parameterType="String"  resultType="ExamDetail">
+		select id,title_id,option_type,content,score,answer,resolve,option_a,option_b,option_c,option_d,option_e,dr,ts 
+		from ieasy_db_exam_detail
+		where dr=0 and id=#{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findErrorDetaill" parameterType="String" resultMap="examDetailList">
+		select ed.id,ed.title_id,ed.option_type,ed.content,ed.score,ed.answer,ed.resolve,ed.option_a,ed.option_b,ed.option_c,option_d,ed.option_e,ed.dr,ed.ts 
+		from ieasy_db_exam_detail ed INNER join ieasy_db_exam_error ee on ed.id=ee.exam_detailid
+		where ee.dr=0 and ed.dr=0 and ee.exam_titleid=#{titleId,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="addDetails" parameterType="java.util.List">
+		insert into ieasy_db_exam_detail(
+			id,title_id,option_type,content,score,answer,resolve,
+			option_a,option_b,option_c,option_d,option_e,dr,ts
+		)values
+		<foreach collection="list" item="item" index="index" separator=",">
+			( 	#{item.id,jdbcType=VARCHAR},
+				#{item.titleId,jdbcType=VARCHAR},
+				#{item.optionType,jdbcType=VARCHAR},
+				#{item.content,jdbcType=VARCHAR},
+				#{item.score ,jdbcType=INTEGER},
+				#{item.answer,jdbcType=VARCHAR},
+				#{item.resolve,jdbcType=VARCHAR},
+				#{item.optionA,jdbcType=VARCHAR},
+				#{item.optionB,jdbcType=VARCHAR},
+				#{item.optionC,jdbcType=VARCHAR},
+				#{item.optionD,jdbcType=VARCHAR},
+				#{item.optionE,jdbcType=VARCHAR},
+				#{item.dr,jdbcType=INTEGER},
+				#{item.ts,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updateExamDetail" parameterType="ExamDetail">
+		update ieasy_db_exam_detail set id=#{id,jdbcType=VARCHAR}
+		<if test="titleId!=null">
+			,title_id=#{titleId,jdbcType=VARCHAR}
+		</if>
+		<if test="optionType!=null">
+			 ,option_type=#{optionType,jdbcType=VARCHAR}
+		</if>
+		<if test="content!=null">
+			,content=#{content,jdbcType=VARCHAR}
+		</if>
+		<if test="score!=null">
+			,score=#{score ,jdbcType=INTEGER}
+		</if>
+		<if test="answer!=null">
+			,answer=#{answer,jdbcType=VARCHAR}
+		</if>
+		<if test="resolve!=null">
+			,resolve=#{resolve,jdbcType=VARCHAR}
+		</if>
+		<if test="optionA!=null">
+			,option_a=#{optionA,jdbcType=VARCHAR}
+		</if>
+		<if test="optionB!=null">
+			,option_b=#{optionB!,jdbcType=VARCHAR}
+		</if>
+		<if test="optionC!=null">
+			,option_c=#{optionC,jdbcType=VARCHAR}
+		</if>
+		<if test="optionD!=null">
+			,option_d=#{optionD,jdbcType=VARCHAR}
+		</if>
+		<if test="optionE!=null">
+			,option_e=#{optionE,jdbcType=VARCHAR}
+		</if>
+		<if test="dr!=null">
+			,dr=#{dr,jdbcType=INTEGER}
+		</if>
+		<if test="ts!=null">
+			,ts=#{ts,jdbcType=TIMESTAMP}
+		</if>
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteExamDetail" parameterType="String">
+		update ieasy_db_exam_detail set dr=1 where id=#{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

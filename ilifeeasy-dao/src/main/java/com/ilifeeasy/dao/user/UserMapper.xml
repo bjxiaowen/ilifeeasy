@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ilifeeasy.dao.user.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.ilifeeasy.bean.user.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="is_admin" property="isAdmin" jdbcType="BIT" />
+    <result column="is_lock" property="isLock" jdbcType="BIT" />
+    <result column="failures" property="failures" jdbcType="INTEGER" />
+    <result column="salt" property="salt" jdbcType="VARCHAR"/>
+    
+    <result column="dr" property="dr" jdbcType="BIT" />
+    <result column="ts" property="ts" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, username, password, sex, age, is_admin, is_lock, failures, dr,salt, ts
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ieasy_db_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getAllUsers" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from ieasy_db_user
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ieasy_db_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ilifeeasy.bean.user.User" >
+    insert into ieasy_db_user (id, username, password, 
+      sex, age, is_admin, is_lock, 
+      failures,salt ,dr, ts)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{isAdmin,jdbcType=BIT}, #{isLock,jdbcType=BIT}, 
+      #{failures,jdbcType=INTEGER}, #{salt,jdbcType=VARCHAR}, #{dr,jdbcType=BIT}, #{ts,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ilifeeasy.bean.user.User" >
+    insert into ieasy_db_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="isAdmin != null" >
+        is_admin,
+      </if>
+      <if test="isLock != null" >
+        is_lock,
+      </if>
+      <if test="failures != null" >
+        failures,
+      </if>
+      <if test="dr != null" >
+        dr,
+      </if>
+      <if test="ts != null" >
+        ts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="isAdmin != null" >
+        #{isAdmin,jdbcType=BIT},
+      </if>
+      <if test="isLock != null" >
+        #{isLock,jdbcType=BIT},
+      </if>
+      <if test="failures != null" >
+        #{failures,jdbcType=INTEGER},
+      </if>
+      <if test="dr != null" >
+        #{dr,jdbcType=BIT},
+      </if>
+      <if test="ts != null" >
+        #{ts,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 根据用户名查找用户  -->
+  <select id="findByUsername" resultMap="BaseResultMap">
+	   select 
+	    <include refid="Base_Column_List" />
+	    from ieasy_db_user
+	    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据用户名查找其角色 -->
+  <select id="findRoles" resultType="java.util.HashSet">
+  		select rl.name from ieasy_db_user us,ieasy_db_role rl,ieasy_re_user_role rur
+		where us.id=rur.userId and rl.id=rur.roleId
+		and us.username== #{username,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据用户名查找其权限 -->
+  <select id="findPermissions" resultType="java.util.HashSet">
+  	select ps.name from ieasy_db_user us,ieasy_db_role rl,ieasy_re_user_role rur,ieasy_db_permission ps,ieasy_re_role_permission rrp
+	where us.id=rur.userId and rl.id=rur.roleId and rl.id=rrp.roleId and rrp.permissionId=ps.id
+	and us.username== #{username,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ilifeeasy.bean.user.User" >
+    update ieasy_db_user
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="isAdmin != null" >
+        is_admin = #{isAdmin,jdbcType=BIT},
+      </if>
+      <if test="isLock != null" >
+        is_lock = #{isLock,jdbcType=BIT},
+      </if>
+      <if test="failures != null" >
+        failures = #{failures,jdbcType=INTEGER},
+      </if>
+      <if test="dr != null" >
+        dr = #{dr,jdbcType=BIT},
+      </if>
+      <if test="ts != null" >
+        ts = #{ts,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ilifeeasy.bean.user.User" >
+    update ieasy_db_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      is_admin = #{isAdmin,jdbcType=BIT},
+      is_lock = #{isLock,jdbcType=BIT},
+      failures = #{failures,jdbcType=INTEGER},
+      dr = #{dr,jdbcType=BIT},
+      ts = #{ts,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

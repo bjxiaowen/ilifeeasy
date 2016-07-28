@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilifeeasy.dao.answer.DomainDao">
+	
+	<resultMap type="com.ilifeeasy.entity.answer.Domain" id="domainList">
+		<result property="id" column="Id" jdbcType="VARCHAR"/>
+		<result property="userId" column="user_id" jdbcType="VARCHAR"/>
+		<result property="domainName" column="domain_name" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+		<result property="ts" column="ts" jdbcType="TIMESTAMP" />
+		<result property="dr" column="dr" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="domainList">
+		SELECT DOM.ID,DOM.USER_ID,DOM.DOMAIN_NAME,DOM.CREATE_TIME,DOM.TS,DOM.DR FROM IEASY_DB_DOMAIN DOM
+		INNER JOIN IEASY_DB_USER US ON US.ID=DOM.USER_ID
+		WHERE DOM.DR=0
+	</select>
+	
+	<insert id="addDomain" parameterType="Domain">
+		insert into IEASY_DB_DOMAIN (ID,USER_ID,DOMAIN_NAME,CREATE_TIME,TS,DR)
+		values(
+			#{id,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR},
+			#{domainName,jdbcType=VARCHAR},
+			#{createTime,jdbcType=DATE},
+			#{ts,jdbcType=TIMESTAMP},
+			#{dr,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<select id="findById" resultType="Domain" parameterType="String">
+		SELECT DOM.ID,DOM.USER_ID,DOM.DOMAIN_NAME,DOM.CREATE_TIME,DOM.TS,DOM.DR FROM IEASY_DB_DOMAIN DOM
+		INNER JOIN IEASY_DB_USER US ON US.ID=DOM.USER_ID
+		WHERE DOM.DR=0 AND DOM.ID=#{domainId}
+	</select>
+	
+	
+	<update id="updateDomain" parameterType="Domain">
+		update IEASY_DB_DOMAIN
+		set id=#{id,jdbcType=VARCHAR}
+		<if test="domainName!=null">
+			,domain_name=#{domainName,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime!=null">
+			,create_time=#{createTime,jdbcType=DATE}
+		</if>
+		<if test="ts!=null">
+			,ts=#{ts,jdbcType=TIMESTAMP}
+		</if>
+		<if test="dr!=null">
+			,dr=#{dr,jdbcType=INTEGER}
+		</if>
+		where id=#{id,jdbcType=INTEGER} and dr=0
+	</update>
+	
+	<update id="deleteDomain" parameterType="String">
+			UPDATE IEASY_DB_DOMAIN SET DR=1 WHERE ID=#{domainId}
+	</update>
+	
+</mapper>

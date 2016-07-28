@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilifeeasy.dao.answer.MajorDao">
+
+	<resultMap type="com.ilifeeasy.entity.answer.Major" id="majorList">
+		<result property="id" column="id" jdbcType="VARCHAR"/>
+		<result property="domainId" column="domain_id" jdbcType="VARCHAR"/>
+		<result property="domainName" column="domain_name" jdbcType="VARCHAR"/>
+		<result property="majorName" column="major_name" jdbcType="VARCHAR"/>
+		<result property="ts" column="ts" jdbcType="TIMESTAMP" />
+		<result property="dr" column="dr" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="findByDomainId" parameterType="String" resultMap="majorList">
+		select ma.id,ma.domain_id,dm.domain_name,ma.major_name,ma.dr,ma.ts from ieasy_db_major ma 
+		inner join ieasy_db_domain dm on ma.domain_id=dm.id
+		where dm.dr=0 and ma.dr=0 and ma.domain_id=#{domainId}
+	</select>
+	
+	<select id="findById" parameterType="String">
+		select ma.id,ma.domain_id,dm.domain_name,ma.major_name,ma.dr,ma.ts from ieasy_db_major ma 
+		inner join ieasy_db_domain dm on ma.domain_id=dm.id
+		where dm.dr=0 and ma.dr=0 and ma.id=#{id}
+	</select>
+	
+	<insert id="addMajor" parameterType="Major">
+		insert into ieasy_db_major (id,domain_id,major_name,dr,ts)
+		values(
+			#{id,jdbcType=VARCHAR},
+			#{domainId,jdbcType=VARCHAR},
+			#{majorName,jdbcType=VARCHAR},
+			#{dr,jdbcType=INTEGER},
+			#{ts,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="updateMajor" parameterType="Major">
+		update ieasy_db_major
+		set id=#{id,jdbcType=VARCHAR}
+		<if test="domainId!=null">
+			,domain_id=#{domainId,jdbcType=VARCHAR}
+		</if>
+		<if test="majorName!=null">
+			,major_name=#{majorName,jdbcType=VARCHAR}
+		</if>
+		<if test="ts!=null">
+			,ts=#{ts,jdbcType=TIMESTAMP}
+		</if>
+		<if test="dr!=null">
+			,dr=#{dr,jdbcType=INTEGER}
+		</if>
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteMajor" parameterType="String">
+		update ieasy_db_major set dr=1 where id=#{majorId,jdbcType=VARCHAR}
+	</update>
+</mapper>

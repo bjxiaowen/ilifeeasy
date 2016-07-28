@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilifeeasy.dao.answer.ExamTitleDao">
+
+	<resultMap type="com.ilifeeasy.entity.answer.ExamTitle" id="examTitleList">
+		<result property="id" column="Id" jdbcType="VARCHAR"/>
+		<result property="courseId" column="course_id" jdbcType="VARCHAR"/>
+		<result property="examName" column="exam_name" jdbcType="VARCHAR"/>
+		<result property="examType" column="exam_type" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" jdbcType="DATE"/>
+		<result property="userId"  column="create_user" jdbcType="VARCHAR"/>
+		<result property="userName" column="name" jdbcType="VARCHAR"/>
+		<result property="examDate" column="exam_date" jdbcType="DATE"/>
+		<result property="examScore" column="exam_score" jdbcType="INTEGER"/>
+		<result property="passScore" column="pass_score" jdbcType="INTEGER"/>
+		<result property="viewCount" column="view_count" jdbcType="INTEGER"/>
+		<result property="answerCount" column="answer_count" jdbcType="INTEGER"/>
+		<result property="dr" column="dr" jdbcType="INTEGER"/>
+		<result property="ts" column="ts" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="findByCourseId" parameterType="String" resultMap="examTitleList">
+		select 
+			id,course_id,exam_name,exam_type,create_time,create_user,exam_date,
+			exam_score,pass_score,view_count,answer_count,dr,ts
+		from ieasy_db_exam_title
+		where dr=0 and course_id=#{courseId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findById" parameterType="String" resultType="ExamTitle">
+		select 
+			id,course_id,exam_name,exam_type,create_time,create_user,exam_date,
+			exam_score,pass_score,view_count,answer_count,dr,ts
+		from ieasy_db_exam_title
+		where dr=0 and id=#{id,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="addExamTitle" parameterType="ExamTitle">
+		insert into ieasy_db_exam_title(id,course_id,exam_name,exam_type,create_time,create_user,exam_date,
+			exam_score,pass_score,view_count,answer_count,dr,ts)
+		values(
+			#{id,jdbcType=VARCHAR},
+			#{courseId,jdbcType=VARCHAR},
+			#{examName,jdbcType=VARCHAR},
+			#{examType,jdbcType=VARCHAR},
+			#{createTime,jdbcType=DATE},
+			#{userId,jdbcType=VARCHAR},
+			#{examDate,jdbcType=DATE},
+			#{examScore,jdbcType=INTEGER},
+			#{passScore,jdbcType=INTEGER},
+			#{viewCount,jdbcType=INTEGER},
+			#{answerCount,jdbcType=INTEGER},
+			#{dr,jdbcType=INTEGER},
+			#{ts,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<update id="updateExamTitle" parameterType="ExamTitle">
+		update ieasy_db_exam_title
+		set id=#{id,jdbcType=VARCHAR}
+		<if test="courseId!=null">
+			,course_id=#{courseId,jdbcType=VARCHAR}
+		</if>
+		<if test="examName!=null">
+			,exam_name=#{examName,jdbcType=VARCHAR}
+		</if>
+		<if test="examType!=null">
+			,exam_type=#{examType,jdbcType=VARCHAR}
+		</if>
+		<if test="createTime!=null">
+			,create_time=#{createTime,jdbcType=DATE}
+		</if>
+		<if test="userId!=null">
+			,create_user=#{userId,jdbcType=VARCHAR}
+		</if>
+		<if test="examDate!=null">
+			,exam_date=#{examDate,jdbcType=DATE}
+		</if>
+		<if test="examScore!=null">
+			,exam_score=exam_score+#{examScore,jdbcType=INTEGER}
+		</if>
+		<if test="passScore!=null">
+			,pass_score=pass_score+#{passScore,jdbcType=INTEGER}
+		</if>
+		<if test="viewCount!=null">
+			,view_count=#{viewCount,jdbcType=INTEGER}
+		</if>
+		<if test="answerCount!=null">
+			,answer_count=answer_count+#{answerCount,jdbcType=INTEGER}
+		</if>
+		<if test="ts!=null">
+			,ts=#{ts,jdbcType=TIMESTAMP}
+		</if>
+		<if test="dr!=null">
+			,dr=#{dr,jdbcType=INTEGER}
+		</if>
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteExamTitle" parameterType="String">
+		update ieasy_db_exam_title set dr=1 where id=#{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

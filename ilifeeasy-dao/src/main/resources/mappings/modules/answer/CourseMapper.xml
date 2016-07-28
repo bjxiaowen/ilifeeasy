@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilifeeasy.dao.answer.CourseDao">
+	
+	<resultMap type="com.ilifeeasy.entity.answer.Course" id="courseList">
+		<result property="id" column="Id" jdbcType="VARCHAR"/>
+		<result property="majorId" column="major_id" jdbcType="VARCHAR"/>
+		<result property="courseName" column="course_name" jdbcType="VARCHAR"/>
+		<result property="publishing" column="publishing" jdbcType="VARCHAR"/>
+		<result property="publishDate" column="publish_date" jdbcType="DATE"/>
+		<result property="author" column="author" jdbcType="VARCHAR"/>
+		<result property="dr" column="dr" jdbcType="INTEGER" />
+		<result property="ts" column="ts" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<select id="findByMajorId" resultMap="courseList" parameterType="String">
+		select cu.id,cu.course_name,cu.major_id,ma.major_name,cu.publishing,cu.publish_date,cu.author,cu.dr,cu.ts 
+		from ieasy_db_course cu inner join ieasy_db_major ma on cu.major_id=ma.id
+		where cu.dr=0 and ma.dr=0  and cu.major_id=#{majorId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findById" resultType="Course" parameterType="String">
+		select cu.id,cu.course_name,cu.major_id,ma.major_name,cu.publishing,cu.publish_date,cu.author,cu.dr,cu.ts 
+		from ieasy_db_course cu inner join ieasy_db_major ma on cu.major_id=ma.id
+		where cu.dr=0 and ma.dr=0  and cu.id=#{id,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="addCourse" parameterType="Course">
+		insert into ieasy_db_course (Id,major_id,course_name,publishing,publish_date,author,ts,dr)
+		values(
+			#{id,jdbcType=VARCHAR},
+			#{majorId,jdbcType=VARCHAR},
+			#{courseName,jdbcType=VARCHAR},
+			#{publishing,jdbcType=VARCHAR},
+			#{publishDate,jdbcType=DATE},
+			#{author,jdbcType=VARCHAR},
+			#{ts,jdbcType=TIMESTAMP},
+			#{dr,jdbcType=INTEGER}
+		)
+	</insert>
+	
+	<update id="updateCourse" parameterType="Course">
+		update ieasy_db_course
+		set id=#{id,jdbcType=VARCHAR}
+		<if test="majorId!=null">
+			,major_id=#{majorId,jdbcType=VARCHAR}
+		</if>
+		<if test="courseName!=null">
+			,course_name=#{courseName,jdbcType=VARCHAR}
+		</if>
+		<if test="publishing!=null">
+			,publishing=#{publishing,jdbcType=VARCHAR}
+		</if>
+		<if test="publishDate!=null">
+			,publish_date=#{publishDate,jdbcType=DATE}
+		</if>
+		<if test="author!=null">
+			,author=#{author,jdbcType=VARCHAR}
+		</if>
+		<if test="ts!=null">
+			,ts=#{ts,jdbcType=TIMESTAMP}
+		</if>
+		<if test="dr!=null">
+			,dr=#{dr,jdbcType=INTEGER}
+		</if>
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="deleteCourse" parameterType="String">
+		update ieasy_db_course
+		set DR=1
+		where id=#{id,jdbcType=INTEGER}
+	</update>
+</mapper>

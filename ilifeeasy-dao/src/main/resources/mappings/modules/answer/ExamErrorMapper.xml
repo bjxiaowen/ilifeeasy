@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilifeeasy.dao.answer.ExamErrorDao">
+
+<!-- 	<resultMap type="ExamError" id="ExamErrorList">
+	
+	</resultMap> -->
+	
+	
+	<insert id="addExamError" parameterType="ExamError">
+		insert into ieasy_db_exam_error (id,user_id,course_id,exam_titleid,exam_detailid,exam_date,dr,ts) 
+		values(
+			#{id,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR},
+			#{courseId,jdbcType=VARCHAR},
+			#{examTitleId,jdbcType=VARCHAR},
+			#{examDetailId,jdbcType=VARCHAR},
+			#{examDate,jdbcType=TIMESTAMP},
+			#{dr,jdbcType=INTEGER},
+			#{ts,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<delete id="deleteExamError" parameterType="String">
+		delete from ieasy_db_exam_error where id=#{id,jdbcType=VARCHAR}
+	</delete>
+</mapper>

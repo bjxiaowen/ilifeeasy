@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	 <!-- 指明满足“/*”的页面，将被“/WEB-INF/views/sitemesh3/decorator.html”所装饰 -->
+4     <mapping path="/sys/aaaa/*" decorator="/resources/sitemesh/decorator.jsp" />
+<!-- 指明满足“/exclude.jsp*”的页面，将被排除，不被装饰 -->
+7   <!--   <mapping path="/sysIndex.jsp*" exclue="true" /> -->
+</sitemesh>
